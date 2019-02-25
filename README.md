@@ -1,118 +1,45 @@
-# django-google-maps
+# Python: Getting Started
 
-This is an example of a heroku-deployable app using postgis and google maps.
-https://django-google-maps.herokuapp.com/
+A barebones Django app, which can easily be deployed to Heroku.
 
+This application supports the [Getting Started with Python on Heroku](https://devcenter.heroku.com/articles/getting-started-with-python) article - check it out.
 
-Like my work? Tip me! https://www.paypal.me/jessamynsmith
+## Running Locally
 
+Make sure you have Python 3.7 [installed locally](http://install.python-guide.org). To push to Heroku, you'll need to install the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli), as well as [Postgres](https://devcenter.heroku.com/articles/heroku-postgresql#local-setup).
 
-### Development
+```sh
+$ git clone https://github.com/heroku/python-getting-started.git
+$ cd python-getting-started
 
-Fork the project on github and git clone your fork, e.g.:
+$ python3 -m venv getting-started
+$ pip install -r requirements.txt
 
-    git clone https://github.com/<username>/django-google-maps.git
+$ createdb python_getting_started
 
-Create a virtualenv using Python 3 and install dependencies. I recommend getting python3 using a package manager (homebrew on OSX), then installing [virtualenv](https://virtualenv.pypa.io/en/latest/installation.html) and [virtualenvwrapper](https://virtualenvwrapper.readthedocs.org/en/latest/install.html#basic-installation) to that python. NOTE! You must change 'path/to/python3'
-to be the actual path to python3 on your system.
+$ python manage.py migrate
+$ python manage.py collectstatic
 
-    mkvirtualenv django-google-maps --python=/path/to/python3
-    pip install -r requirements/development.txt
-    
-Sign up for the Yelp Fusion API and create an app as directed: https://www.yelp.com/developers/documentation/v3/authentication
-Set environment variables for your Yelp app:
+$ heroku local
+```
 
-    export YELP_API_KEY=<VALUE_FROM_YELP>
+Your app should now be running on [localhost:5000](http://localhost:5000/).
 
-Sign up for a Google maps and get an API key: https://developers.google.com/maps/documentation/javascript/get-api-key
-Set environment variable for Google maps:
+## Deploying to Heroku
 
-    export GOOGLE_MAPS_API_KEY=<VALUE_FROM_GOOGLE>
+```sh
+$ heroku create
+$ git push heroku master
 
-Set environment variables as desired. Recommended dev settings:
+$ heroku run python manage.py migrate
+$ heroku open
+```
+or
 
-    export DJANGO_DEBUG=1
-    export DJANGO_ENABLE_SSL=0
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
-Optional environment variables, generally only required in production:
+## Documentation
 
-    DJANGO_SECRET_KEY
-    
-You can add the exporting of environment variables to the virtualenv activate script so they are always available.
+For more information about using Python on Heroku, see these Dev Center articles:
 
-##### Database
-
-This app requires PostgreSQL. I recommend installing using a package manager (homebrew on OSX).
-
-Create a database:
-
-    createdb django-google-maps
-    
-Enable the postgis extension:
-
-    psql django-google-maps
-    create extension postgis;
-
-Set up db:
-
-    python manage.py migrate
-
-
-##### Testing
-
-Run tests:
-
-    python manage.py test
-
-Check code style:
-
-    flake8
-
-Run server:
-
-    python manage.py runserver
-    
-Or run using gunicorn:
-
-    gunicorn django-google-maps.wsgi
-
-Lint JavaScript:
-
-    ./node_modules/jshint/bin/jshint */static/*/js
-
-
-### Continuous Integration and Deployment
-
-
-This project is already set up for deployment to Heroku.
-
-Create application (note the geo buildpack will only work on cedar-14):
-
-    heroku create --stack cedar-14 <app_name>
-    
-Be sure to add your heroku app to ALLOWED_HOSTS in settings.py
-    
-Add postgresql addon:
-    
-    heroku addons:add heroku-postgresql
-    
-Enable extension in database:
-
-    heroku pg:psql
-    create extension postgis;
-    
-Add Heroku buildpacks:
-
-    heroku buildpacks:set -i 1 https://github.com/cyberdelia/heroku-geo-buildpack.git
-    heroku buildpacks:set -i 2 heroku/python
-    
-Set environment variables:
-
-    heroku config:set YELP_API_KEY=<VALUE_FROM_YELP>
-    heroku config:set GOOGLE_MAPS_API_KEY=<VALUE_FROM_GOOGLE>
-
-You can deploy manually using:
-
-    git push heroku master
-    
-Or configure Heroku for automatic deployment from GitHub.
+- [Python on Heroku](https://devcenter.heroku.com/categories/python)
